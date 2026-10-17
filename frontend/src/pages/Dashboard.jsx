@@ -1,12 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
-import { Plus } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Truck, ShoppingCart, Boxes } from "lucide-react";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext.jsx";
 import StatCard from "../components/StatCard.jsx";
-import DeliveryForm from "../components/DeliveryForm.jsx";
-import SaleForm from "../components/SaleForm.jsx";
 import TransactionsFeed from "../components/TransactionsFeed.jsx";
-import AddCylinderModal from "../components/AddCylinderModal.jsx";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -60,7 +58,6 @@ export default function Dashboard() {
           {lowStockCount > 0 && (
             <SummaryPill label="Low Stock" value={lowStockCount} tone="gold" />
           )}
-          <AddCylinderModal onCreated={loadData} />
         </div>
       </header>
 
@@ -70,6 +67,29 @@ export default function Dashboard() {
           low. Consider restocking soon.
         </div>
       )}
+
+      {/* Quick actions */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <QuickAction
+          to="/delivery"
+          icon={Truck}
+          title="Log Delivery"
+          desc="Receive stock from a supplier"
+        />
+        <QuickAction
+          to="/sale"
+          icon={ShoppingCart}
+          title="New Sale / Swap"
+          desc="Sell a full cylinder, take back an empty"
+          accent
+        />
+        <QuickAction
+          to="/inventory"
+          icon={Boxes}
+          title="Manage Inventory"
+          desc="Add, edit, or remove cylinder types"
+        />
+      </section>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
         {loading ? (
@@ -81,17 +101,11 @@ export default function Dashboard() {
           ))
         ) : cylinders.length === 0 ? (
           <div className="col-span-full bg-white rounded-2xl border border-dashed border-ink-100 p-10 text-center text-ink-400">
-            <Plus className="mx-auto mb-2" />
-            No cylinder types yet. Seed the database to get started.
+            No cylinder types yet. Add some from the Inventory page.
           </div>
         ) : (
           cylinders.map((c) => <StatCard key={c._id} cylinder={c} />)
         )}
-      </section>
-
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <DeliveryForm cylinders={cylinders} onSaved={loadData} />
-        <SaleForm cylinders={cylinders} onSaved={loadData} />
       </section>
 
       <section>
@@ -114,5 +128,28 @@ function SummaryPill({ label, value, tone }) {
       </p>
       <p className="text-lg font-bold leading-tight">{value}</p>
     </div>
+  );
+}
+
+function QuickAction({ to, icon: Icon, title, desc, accent }) {
+  return (
+    <Link
+      to={to}
+      className={`group rounded-2xl border p-5 bg-white shadow-sm hover:shadow-md transition flex items-start gap-4 ${
+        accent ? "border-gold-200 hover:border-gold-500" : "border-ink-100 hover:border-navy-300"
+      }`}
+    >
+      <div
+        className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+          accent ? "bg-gold-50 text-gold-700" : "bg-navy-50 text-navy-700"
+        }`}
+      >
+        <Icon size={20} />
+      </div>
+      <div>
+        <p className="font-semibold text-ink-800 group-hover:text-navy-700">{title}</p>
+        <p className="text-xs text-ink-400 mt-0.5">{desc}</p>
+      </div>
+    </Link>
   );
 }

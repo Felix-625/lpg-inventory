@@ -3,6 +3,9 @@ import { useAuth } from "./context/AuthContext.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Delivery from "./pages/Delivery.jsx";
+import Sale from "./pages/Sale.jsx";
+import Inventory from "./pages/Inventory.jsx";
 import Layout from "./components/Layout.jsx";
 
 const PrivateRoute = ({ children }) => {
@@ -24,6 +27,9 @@ export default function App() {
         }
       >
         <Route index element={<Dashboard />} />
+        <Route path="delivery" element={<Delivery />} />
+        <Route path="sale" element={<Sale />} />
+        <Route path="inventory" element={<Inventory />} />
       </Route>
     </Routes>
   );
