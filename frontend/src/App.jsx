@@ -7,6 +7,7 @@ import Delivery from "./pages/Delivery.jsx";
 import Sale from "./pages/Sale.jsx";
 import Inventory from "./pages/Inventory.jsx";
 import Layout from "./components/Layout.jsx";
+import Sales from "./pages/Sales.jsx";
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth();
@@ -29,6 +30,7 @@ export default function App() {
         <Route index element={<Dashboard />} />
         <Route path="delivery" element={<Delivery />} />
         <Route path="sale" element={<Sale />} />
+        <Route path="sales" element={<Sales />} />
         <Route path="inventory" element={<Inventory />} />
       </Route>
     </Routes>

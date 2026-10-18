@@ -6,6 +6,7 @@ import {
   ShoppingCart,
   Boxes,
   LogOut,
+  BarChart3,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -13,6 +14,7 @@ const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/delivery", label: "Log Delivery", icon: Truck },
   { to: "/sale", label: "New Sale / Swap", icon: ShoppingCart },
+  { to: "/sales", label: "Sales History", icon: BarChart3 },
   { to: "/inventory", label: "Inventory", icon: Boxes },
 ];
 
