@@ -109,8 +109,16 @@ export default function Dashboard() {
       </section>
 
       <section>
-        <TransactionsFeed transactions={transactions} />
-      </section>
+  <TransactionsFeed transactions={transactions} />
+  <div className="mt-3 text-right">
+    <Link
+      to="/sales"
+      className="text-sm font-semibold text-navy-700 hover:underline"
+    >
+      View all sales →
+    </Link>
+  </div>
+</section>
     </div>
   );
 }
