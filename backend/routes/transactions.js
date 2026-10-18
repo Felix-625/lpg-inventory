@@ -7,12 +7,32 @@ const router = express.Router();
 router.use(auth);
 
 router.get("/", async (req, res) => {
-  const limit = parseInt(req.query.limit) || 20;
-  const txs = await Transaction.find()
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .populate("recordedBy", "name email");
-  res.json(txs);
+  try {
+    const { type, month } = req.query;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+
+    const filter = {};
+    if (type === "sale" || type === "delivery") filter.type = type;
+
+    if (month && /^\d{4}-\d{2}$/.test(month)) {
+      const [year, m] = month.split("-").map(Number);
+      // Month is 0-indexed in JS Date
+      const start = new Date(Date.UTC(year, m - 1, 1, 0, 0, 0));
+      const end = new Date(Date.UTC(year, m, 1, 0, 0, 0));
+      filter.createdAt = { $gte: start, $lt: end };
+    }
+
+    let query = Transaction.find(filter)
+      .sort({ createdAt: -1 })
+      .populate("recordedBy", "name email");
+
+    if (limit > 0) query = query.limit(limit);
+
+    const txs = await query;
+    res.json(txs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // Delivery
